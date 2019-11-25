@@ -1,0 +1,19 @@
+KERNEL=="mmcblk[0-9]*[0-9]", 	NAME="%k", ATTRS{type}=="SD", SYMLINK+="sdcard"
+KERNEL=="sd[a-z]*", 	NAME="%k", SYMLINK+="udisk"
+
+ACTION!="add", GOTO="aw"
+KERNEL=="sd[a-z]*", SUBSYSTEM=="block", RUN+="/usr/bin/udev_handler add udisk /dev/%k"
+LABEL="aw"
+
+ACTION!="remove", GOTO="aw"
+KERNEL=="sd[a-z]*", SUBSYSTEM=="block", RUN+="/usr/bin/udev_handler remove udisk"
+LABEL="aw"
+
+ACTION!="add", GOTO="aw"
+KERNEL=="mmcblk[0-9]*[0-9]", SUBSYSTEM=="block", RUN+="/usr/bin/udev_handler add sd /dev/%k"
+LABEL="aw"
+
+ACTION!="remove", GOTO="aw"
+KERNEL=="mmcblk[0-9]*[0-9]", SUBSYSTEM=="block", RUN+="/usr/bin/udev_handler remove sd"
+LABEL="aw"
+
